@@ -4,20 +4,21 @@
  * 
  */
 
-if ( !defined( 'PGC_PLUGIN_URL' ) ) {
-    header( 'HTTP/1.0 403 Forbidden' );
-    die;  // Silence is golden, direct call is prohibited
-}
+defined( 'ABSPATH' ) || exit;
 
-pgc_show_message($mess);
-
+if ( !empty( $mess ) ) {
 ?>
+<div class="updated" style="margin:0;"><?php echo esc_html( $mess ); ?></div><br style="clear: both;"/>
+<?php
+}
+?>
+
 <div class="wrap">
     <div class="icon32" id="icon-options-general"><br/></div>
-    <h2><?php echo PGC_PLUGIN_NAME .'  (Plugins Garbage Collector)'; ?></h2>
-    <form method="post" action="tools.php?page=plugins-garbage-collector.php" onsubmit="return pgc_onsubmit();">
+    <h2><?php echo esc_html__('Database Cleanup', 'plugins-garbage-collector'); ?></h2>
+    <form id="plugins_garbage_collector_form" name="plugins_garbage_collector_form" method="post" action="tools.php?page=plugins-garbage-collector.php">
 <?php
-    settings_fields( 'pgc_options' );
+    settings_fields( 'plugins-garbage-collector' );
 ?>
         <div id="poststuff" class="metabox-holder">					
             <div class="has-sidebar" >
@@ -38,7 +39,7 @@ pgc_show_message($mess);
                                   <label for="show_hidden_tables"><?php esc_html_e('Show hidden tables', 'plugins-garbage-collector'); ?></label>
                                 </div>
                                 <div style="float: left; display: inline; margin: -5px 0 10px 0;">
-                                  <input type="button" class="button button-priamry" name="scan_db" value="<?php esc_html_e('Scan Database', 'plugins-garbage-collector'); ?>" title="<?php esc_html_e('Click this button to gather information how plugins use your WordPress database', 'plugins-garbage-collector'); ?>" onclick="pgc_actions('scan');"/>
+                                  <input type="button" class="button button-primary" name="scan_db" value="<?php esc_html_e('Scan Database', 'plugins-garbage-collector'); ?>" title="<?php esc_html_e('Click this button to gather information how plugins use your WordPress database', 'plugins-garbage-collector'); ?>" onclick="pgc_actions('scan');"/>
                                 </div>
                             </div>
                         </div>

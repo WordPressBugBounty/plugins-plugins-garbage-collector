@@ -75,7 +75,7 @@ function pgc_get_plugins_scan_results() {
         url: pgcSettings.ajax_url,
         data: {
             action: 'plugins_garbage_collector',
-            subaction: 'get-plugins-scan-results',
+            subaction: 'get-scan-results',
             show_hidden_tables: show_hidden_tables,
             _ajax_nonce: pgcSettings.ajax_nonce
         },
@@ -86,7 +86,7 @@ function pgc_get_plugins_scan_results() {
                 return;
             }
             var data = JSON.parse(response);
-            if (data.result=='error') {
+            if (data.result=='error') {                
                 alert(data.message);
                 return;
             }            
@@ -288,7 +288,7 @@ jQuery.ajax({
 // end of pgc_hide_table()
 
 
-function pgc_actions(action) {
+function pgc_actions( action ) {
     if (action == 'scan') {
         if (document.getElementById('search_nonewp_tables').checked) {
             searchNoneWpTables = 1;
@@ -309,7 +309,7 @@ function pgc_actions(action) {
     } else {
         actionTxt = action;
     }
-    if (!confirm(actionTxt + ' ' + pgcSettings.take_some_time)) {
+    if ( !confirm( actionTxt + ' ' + pgcSettings.take_some_time ) ) {
         return false;
     }
     if (action == 'scan') {
@@ -322,15 +322,24 @@ function pgc_actions(action) {
 // end of pgc_actions()
 
 
-function pgc_onsubmit() {
-    var checkBoxes = new Array();
-    checkBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
-    var selectedTables = new Array();
+function pgc_get_selected_tables() {
+    
+    var check_boxes = new Array();
+    check_boxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    var selected_tables = new Array();
     var table = '';
-    for (var i = 0; i < checkBoxes.length; i++) {
-        table = checkBoxes[i].name.substring(7);
-        selectedTables.push(table);
+    for (var i = 0; i < check_boxes.length; i++) {
+        table = check_boxes[i].name.substring(7);
+        selected_tables.push(table);
     }
+    
+    return selected_tables;
+}
+
+
+function pgc_delete_selected_tables() {
+    
+    var selectedTables = pgc_get_selected_tables();    
     if (selectedTables.length===0) {
         alert(pgcSettings.select_table_before_delete);
         return false;
@@ -345,6 +354,29 @@ function pgc_onsubmit() {
         return false;
     }
     
-    return true;
+    jQuery('#plugins_garbage_collector_form').submit();
 }
-// end of pgc_onsubmit()
+// end of pgc_delete_selected_tables()
+
+
+function pgc_delete_extra_columns() {
+     
+    var selectedTables = pgc_get_selected_tables();    
+    if (selectedTables.length===0) {
+        alert(pgcSettings.select_table_before_delete);
+        return false;
+    }
+    
+    var tables_list = selectedTables.join(', ');
+    if (!confirm(pgcSettings.confirm_before_column_deletion1 + "\n"+'('+ tables_list +')')) {
+        return false;
+    }
+    
+    if (!confirm(pgcSettings.confirm_before_column_deletion2)) {
+        return false;
+    }
+    
+    jQuery('#plugins_garbage_collector_form').submit();
+}
+// end of pgc_delete_extra_columns()  
+

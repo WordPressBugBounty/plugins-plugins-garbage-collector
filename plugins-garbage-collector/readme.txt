@@ -1,12 +1,14 @@
 === Plugins Garbage Collector (Database Cleanup) ===
 Contributors: shinephp
 Donate link: http://www.shinephp.com/donate/
-Tags: garbage, collector, database, clear, unused tables, cleaner
-Requires at least: 4.0
-Tested up to: 5.9.2
-Stable tag: 0.14
+Tags: database, clear, unused tables, cleaner, plugin tables
+Requires at least: 4.6
+Tested up to: 7.1
+Stable tag: 0.15
+License: GPLv3
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Find unused database tables from deactivated or deleted plugins. You can delete unused database tables to reduce database volume and enhance site performance.
+Find and delete unused database tables belong to deactivated or deleted plugins directly from WP dashboard.
 
 == Description ==
 
@@ -35,6 +37,13 @@ Comming soon. Just ask it. I will search the answer.
 
 
 == Changelog ==
+= 0.15 [12.08.2026] =
+* Update: Full code refactoring to provide compatibility with PHP 8.4, WordPress 7.0
+* Update: Auto-refreshed "known plugins" data cache is now stored under wp-content/uploads/pgc-data/ instead of the plugin's own directory, so the plugin no longer needs its own directory to be writable. Falls back to the previous location if the uploads directory isn't usable.
+* Update: "Known plugins" JSON data files were moved back to Amazon Web Services S3
+* Update: uninstall.php was added.
+* Fix: Vulnerability type: Cross Site Request Forgery (CSRF) (OWASP A1: Broken Access Control). Thanks to [patchstack.com] team for the report.
+* Fix: Showed false "Database is clean" message if "Newsletters" (Tribulant) plugin is active.
 
 = 0.14 [03.04.2022] =
 * Update: "Known plugins" JSON data files were moved from Amazon Web Services S3 to Yandex Cloud Object Storage.
